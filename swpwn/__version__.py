@@ -3,6 +3,6 @@
 #  _) \  \  _  /| '__/ \  _  /|  \ | 
 # )____)  )/ \( )_(     )/ \( )_()_( 
     
-VERSION = (1, 0, 0)
+VERSION = (1, 0, 3)
 
 __version__ = '.'.join(map(str, VERSION))

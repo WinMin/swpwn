@@ -17,7 +17,7 @@ DESCRIPTION = 'My short description for my project.'
 URL = 'https://github.com/WinMin/some-gadget/tree/master/mypwn'
 EMAIL = 'bestswngs@gmail.com'
 AUTHOR = 'Swing'
-REQUIRES_PYTHON = '>=3.6.0'
+REQUIRES_PYTHON = '>=2.7.0'
 VERSION = None
 
 # What packages are required for this module to be executed?

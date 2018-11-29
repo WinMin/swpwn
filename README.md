@@ -114,17 +114,23 @@ sla = lambda a,b : io.sendlineafter(a,b)
 
 we can use the simple word to call IO Function. 
 
+### 0x04 get main_arean
+
+
+
+use obj dump get main_arean offest
+
 
 
 ### TODO
 
 quick find magic function add, like main_arean,malloc_hook...
 
-- [ ] malloc_hook
+- [x] malloc_hook
 
 - [ ] Free_hook
 
-- [ ] main_arean
+- [x] main_arean
 
 - [ ] system
 

